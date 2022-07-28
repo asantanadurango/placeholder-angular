@@ -41,16 +41,19 @@ export class RecordsComponent {
 
   getRecords() {
     this._place.callAllRecords().then((res) => {
-      let result: Record[] = [];
-      res.forEach((r: any) => {
-        const postsParse = JSON.parse(r.posts);
-        const recordParsed: any = { ...r };
-        recordParsed.posts = postsParse;
-        result.push(recordParsed);
-      });
-      console.log(result);
-      this._records = result;
-      console.log(this._records);
+      try {
+        let result: Record[] = [];
+        res.forEach((r: any) => {
+          const postsParse = JSON.parse(r.posts);
+          const recordParsed: any = { ...r };
+          recordParsed.posts = postsParse;
+          result.push(recordParsed);
+        });
+        this._records = result;
+      } catch (error) {
+        this._records = [];
+        console.error(error);
+      }
     });
   }
 
@@ -65,12 +68,13 @@ export class RecordsComponent {
     };
 
     fetch('http://localhost:9000/update', reqOpts).then((res) =>
-      console.log(res)
+      this.getRecords()
     );
-    this.getRecords();
   }
 
   deleteRecord(id: string) {
+    // if (this._records.length === 1) return;
+
     const reqOpts: RequestInit = {
       method: 'DELETE',
       headers: {
@@ -80,9 +84,8 @@ export class RecordsComponent {
       body: JSON.stringify({ id }),
     };
 
-    fetch('http://localhost:9000/delete', reqOpts).then((res) =>
-      console.log(res)
-    );
-    this.getRecords();
+    fetch('http://localhost:9000/delete', reqOpts).then((res) => {
+      this.getRecords();
+    });
   }
 }

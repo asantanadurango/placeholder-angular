@@ -1,9 +1,11 @@
 <div>
   <input
-    type="text"
+    type="number"
+    min="1"
+    max="10"
     class="form-control"
     name="record"
-    placeholder="Enter id"
+    placeholder="Insert id and press enter"
     (keyup.enter)="searchRecord(txtSearch.value)"
     #txtSearch
   />
@@ -15,7 +17,11 @@
     <ul>
       <li *ngFor="let post of record.posts">{{ post.title }}</li>
     </ul>
-    <button (click)="saveRecord()" class="btn btn-info">guardar</button>
+    <button (click)="saveRecord(); txtSearch.value = ''" class="btn btn-info">
+      guardar
+    </button>
   </div>
-  <ng-template #notInfo> not Info </ng-template>
+  <ng-template #notInfo>
+    <p #txtMessage>{{ messageError }}</p>
+  </ng-template>
 </div>

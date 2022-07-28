@@ -1,5 +1,5 @@
 import { JsonPipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { PlaceholderService } from '../services/placeholder.service';
 
 interface Post {
@@ -29,6 +29,8 @@ export class SearchComponent {
     calendar: '',
   };
 
+  messageError: string = 'Not Info';
+
   get str(): any {
     return JSON.stringify({ ...this._record });
   }
@@ -46,9 +48,15 @@ export class SearchComponent {
       },
       body: JSON.stringify(this.record),
     };
-    console.log(JSON.stringify(this.record));
 
-    fetch('http://localhost:9000/add', reqOpts).then((res) => console.log(res));
+    fetch('http://localhost:9000/add', reqOpts).then((res) => {
+      this._record = {
+        name: '',
+        posts: [],
+        method: 'GET',
+        calendar: '',
+      };
+    });
   }
 
   getCalendar(): string {
@@ -57,7 +65,13 @@ export class SearchComponent {
   }
 
   constructor(private _place: PlaceholderService) {}
+
+  @ViewChild('txtMessage') txtMessage!: ElementRef<HTMLInputElement>;
   async searchRecord(id: string) {
+    if (isNaN(Number(id)) || Number(id) > 10 || Number(id) < 1) {
+      this.txtMessage.nativeElement.innerText = 'Enter a avaliable number';
+      return;
+    }
     this._place.callRecord(id).then((res) => {
       this._record.name = res.name;
       this._record.posts = res.posts;
