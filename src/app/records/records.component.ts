@@ -21,34 +21,68 @@ interface Post {
   styleUrls: ['./records.component.css'],
 })
 export class RecordsComponent {
- 
   private _records: Record[] = [];
 
   constructor(private _place: PlaceholderService) {
-    this._getRecords();
+    this.getRecords();
   }
 
   get records(): any {
-    const x = this._getRecords() || [];
-    return x;
+    return [...this._records];
+  }
+
+  dateForStr(date: string): string {
+    return date.slice(0, 10);
   }
 
   get rescordsStr() {
-    const x = this._getRecords() || [];
-    return JSON.stringify(x);
+    return JSON.stringify([...this._records]);
   }
 
-  private async _getRecords() {
-    const res = await this._place.callAllRecords();
-    let result: any = [];
-    res.forEach((r: any) => {
-      const dataParse = JSON.parse(r.data);
-      const recordParsed: any = { ...r };
-      recordParsed.data = dataParse;
-      result.push(recordParsed);
+  getRecords() {
+    this._place.callAllRecords().then((res) => {
+      let result: Record[] = [];
+      res.forEach((r: any) => {
+        const postsParse = JSON.parse(r.posts);
+        const recordParsed: any = { ...r };
+        recordParsed.posts = postsParse;
+        result.push(recordParsed);
+      });
+      console.log(result);
+      this._records = result;
+      console.log(this._records);
     });
-    console.log(result);
-    this._records = result;
-    console.log(this._records);
+  }
+
+  updateRecord(calendar: string, method: string, id: string) {
+    const reqOpts: RequestInit = {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ calendar, method, id }),
+    };
+
+    fetch('http://localhost:9000/update', reqOpts).then((res) =>
+      console.log(res)
+    );
+    this.getRecords();
+  }
+
+  deleteRecord(id: string) {
+    const reqOpts: RequestInit = {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id }),
+    };
+
+    fetch('http://localhost:9000/delete', reqOpts).then((res) =>
+      console.log(res)
+    );
+    this.getRecords();
   }
 }

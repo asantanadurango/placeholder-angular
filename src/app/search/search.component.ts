@@ -37,6 +37,20 @@ export class SearchComponent {
     return { ...this._record };
   }
 
+  saveRecord() {
+    const reqOpts: RequestInit = {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(this.record),
+    };
+    console.log(JSON.stringify(this.record));
+
+    fetch('http://localhost:9000/add', reqOpts).then((res) => console.log(res));
+  }
+
   getCalendar(): string {
     const date = new Date();
     return date.toISOString().split('T')[0];

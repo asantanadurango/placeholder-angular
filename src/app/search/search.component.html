@@ -15,7 +15,7 @@
     <ul>
       <li *ngFor="let post of record.posts">{{ post.title }}</li>
     </ul>
-    <button class="btn btn-info">guardar</button>
+    <button (click)="saveRecord()" class="btn btn-info">guardar</button>
   </div>
   <ng-template #notInfo> not Info </ng-template>
 </div>

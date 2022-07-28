@@ -25,6 +25,9 @@ export class UsersComponent {
   callUsers() {
     fetch('https://jsonplaceholder.typicode.com/users')
       .then((response) => response.json())
-      .then((json) => (this._users = json));
+      .then((json) => {
+        this._users = json;
+        console.log(this._users);
+      });
   }
 }
