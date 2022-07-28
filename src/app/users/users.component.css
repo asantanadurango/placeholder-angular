@@ -1,0 +1,23 @@
+table {
+  width: 100%;
+  max-width: 700px;
+  outline-offset: 3px;
+  outline: 2px solid var(--bs-cyan);
+}
+
+thead {
+  background: var(--bs-cyan);
+  text-align: left;
+}
+
+tr {
+  display: grid;
+  grid-template-columns: 40px repeat(3, 1fr);
+  grid-gap: 10px;
+  position: relative;
+}
+
+td {
+  overflow: auto;
+  align-self: center;
+}

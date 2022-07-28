@@ -1,0 +1,21 @@
+<div>
+  <input
+    type="text"
+    class="form-control"
+    name="record"
+    placeholder="Enter id"
+    (keyup.enter)="searchRecord(txtSearch.value)"
+    #txtSearch
+  />
+</div>
+
+<div class="show-info">
+  <div class="info" *ngIf="record.name !== ''; else notInfo">
+    <h6>{{ record.name }}</h6>
+    <ul>
+      <li *ngFor="let post of record.posts">{{ post.title }}</li>
+    </ul>
+    <button class="btn btn-info">guardar</button>
+  </div>
+  <ng-template #notInfo> not Info </ng-template>
+</div>
