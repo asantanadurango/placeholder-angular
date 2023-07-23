@@ -1,20 +1,6 @@
 import { JsonPipe } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { PlaceholderService } from '../services/placeholder.service';
-
-interface Post {
-  userId: number;
-  id: number;
-  title: string;
-  body: string;
-}
-
-interface Record {
-  name: string;
-  posts: Post[];
-  method: string;
-  calendar: string;
-}
+import { RecordsService, type Post, type Record } from '../services/records.service';
 
 @Component({
   selector: 'app-search',
@@ -22,60 +8,45 @@ interface Record {
   styleUrls: ['./search.component.css'],
 })
 export class SearchComponent {
-  private _record: Record = {
-    name: '',
-    posts: [],
-    method: 'GET',
-    calendar: '',
+  private readonly initialRecord:Record = {
+    user:{id:0, name:''},
+    posts:[]
   };
+  readonly InitialmessageError : string = 'Search User';
+  constructor(private _place: RecordsService) {}
 
-  messageError: string = 'Not Info';
+  private _record: Record = this.initialRecord
+  messageError = this.InitialmessageError
 
-  get str(): any {
-    return JSON.stringify({ ...this._record });
-  }
-
-  get record(): any {
+  get record(): Record {
     return { ...this._record };
   }
 
-  saveRecord() {
-    const reqOpts: RequestInit = {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(this.record),
-    };
-
-    fetch('http://localhost:9000/add', reqOpts).then((res) => {
-      this._record = {
-        name: '',
-        posts: [],
-        method: 'GET',
-        calendar: '',
-      };
-    });
+  saveRecord(inpSearch:HTMLInputElement) {
+    inpSearch.value=''
+    inpSearch.focus()
+    this._place.saveOne(this.record)
+    .then(_=>{
+      this._record=this.initialRecord
+      this.messageError = this.InitialmessageError
+    })
+    .catch(e=>{
+      if(e instanceof Error){
+        console.log(e.message)
+        this.messageError = e.message
+        this._record=this.initialRecord
+      }
+    })
   }
 
-  getCalendar(): string {
-    const date = new Date();
-    return date.toISOString().split('T')[0];
-  }
-
-  constructor(private _place: PlaceholderService) {}
-
-  @ViewChild('txtMessage') txtMessage!: ElementRef<HTMLInputElement>;
+  @ViewChild('txtMessage') txtMessage!:HTMLParagraphElement;
   async searchRecord(id: string) {
     if (isNaN(Number(id)) || Number(id) > 10 || Number(id) < 1) {
-      this.txtMessage.nativeElement.innerText = 'Enter a avaliable number';
+      this.txtMessage.textContent = 'Enter a avaliable number';
       return;
     }
-    this._place.callRecord(id).then((res) => {
-      this._record.name = res.name;
-      this._record.posts = res.posts;
-      this._record.calendar = this.getCalendar();
+    this._place.getOne(Number(id)).then((res) => {
+      this._record = res
     });
   }
 }

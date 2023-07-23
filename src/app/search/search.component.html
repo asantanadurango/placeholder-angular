@@ -5,23 +5,24 @@
     max="10"
     class="form-control"
     name="record"
-    placeholder="Insert id and press enter"
+    placeholder="Insert id between 1 - 10 and press enter"
     (keyup.enter)="searchRecord(txtSearch.value)"
     #txtSearch
   />
 </div>
 
 <div class="show-info">
-  <div class="info" *ngIf="record.name !== ''; else notInfo">
-    <h6>{{ record.name }}</h6>
+  <div class="info" *ngIf="record.user.name; else notInfo">
+    <h6>{{ record.user.name }}</h6>
     <ul>
       <li *ngFor="let post of record.posts">{{ post.title }}</li>
     </ul>
-    <button (click)="saveRecord(); txtSearch.value = ''" class="btn btn-info">
+    <button (click)="saveRecord(txtSearch); txtSearch.value" class="btn btn-info">
       guardar
     </button>
   </div>
   <ng-template #notInfo>
-    <p #txtMessage>{{ messageError }}</p>
+    <p #txtMessage [class]="messageError !== InitialmessageError ? 'red':''">
+      {{ messageError }}</p>
   </ng-template>
 </div>

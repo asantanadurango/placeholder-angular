@@ -10,7 +10,7 @@ import { SearchComponent } from './search/search.component';
 import { RecordsComponent } from './records/records.component';
 import { AppRoutingModule } from './app.routing.module';
 
-import { PlaceholderService } from './services/placeholder.service';
+import { RecordsService } from './services/records.service';
 
 @NgModule({
   declarations: [
@@ -23,7 +23,7 @@ import { PlaceholderService } from './services/placeholder.service';
     RecordsComponent,
   ],
   imports: [BrowserModule, AppRoutingModule],
-  providers: [PlaceholderService],
+  providers: [RecordsService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
