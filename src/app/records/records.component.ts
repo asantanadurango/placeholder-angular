@@ -7,7 +7,6 @@ import {
 @Component({
   selector: 'app-records',
   templateUrl: './records.component.html',
-  styleUrls: ['./records.component.css'],
 })
 export class RecordsComponent {
   private _records: Record[] | null = [];

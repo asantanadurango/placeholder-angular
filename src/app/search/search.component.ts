@@ -1,11 +1,9 @@
-import { JsonPipe } from '@angular/common';
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { RecordsService, type Post, type Record } from '../services/records.service';
+import { Component, ViewChild } from '@angular/core';
+import { RecordsService,  type Record } from '../services/records.service';
 
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
-  styleUrls: ['./search.component.css'],
 })
 export class SearchComponent {
   private readonly initialRecord:Record = {
