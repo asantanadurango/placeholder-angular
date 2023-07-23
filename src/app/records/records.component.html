@@ -9,11 +9,10 @@
   <ng-template #showRecords>
     <ul>
       <li *ngFor="let record of records; let i = index" class="card mb-3 p-1">
-        <!-- <p>Id: {{ record?.user?.id }}</p> -->
-        <p>Id {{ record?.user?.id }} - User: {{ record?.user?.name }}</p>
+        <p class="fw-bolder text-secondary border-bottom border-2 border-info rounded-1 p-1">Id {{ record?.user?.id }} - User: {{ record?.user?.name }}</p>
         <ul>
           <li *ngFor="let post of record.posts">
-            <h6>Title: {{ post.title }}</h6>
+            <p class="fw-normal fst-italic">Title: {{ post.title }}</p>
           </li>
         </ul>
         <div class="row flex justify-content-around">
